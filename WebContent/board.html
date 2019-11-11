@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>게시물 검색 하기</title>
+
+<script type="text/javascript" src="ajax.js">
+</script>
+<script type="text/javascript">
+	function loadBoard() {
+		var f = document.f;
+		var params = "column="+f.column.value + "&find=" + f.find.value;
+		
+		sendRequest("board.jsp", params, boardList, "POST");
+	}
+	
+	function boardList() {
+		if(ajax.readyState ==4) {
+			if(ajax.status =200) {
+				console.log(ajax.responseText); // console이 보이게 도와줌
+				// 서버가 전달해준 내용인 ajax.responseText를 board.innerHTML에 넣어줘
+				board.innerHTML = ajax.responseText;
+			} else {
+				alert("서버오류 : " + ajax.status);
+			}
+		}
+	}
+</script>
+
+</head>
+<body>
+
+<form name="f">
+	<select name="column">
+		<option value="name">글쓴이</option>
+		<option value="title">제목</option>
+		<option value="content">내용</option>
+	</select>
+	<input type="text" name="find">
+	<input type="button" value="검색" onclick="loadBoard()">
+</form>
+<br>
+
+<div id="board">
+	<!-- 내용 위치 -->
+</div>
+
+</body>
+</html>

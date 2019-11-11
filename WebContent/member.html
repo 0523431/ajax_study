@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>회원이름 검색하기</title>
+
+<script type="text/javascript" src="ajax.js">
+</script>
+<script type="text/javascript">
+	
+	// 이 함수를 실행하면, params값이 member.jsp에 넘어감
+	function loadName(f) {
+		var params = "name=" + f.name.value;
+		// sendRequest(url, params, callback, method)
+		sendRequest("member.jsp", params, memberList, "POST");
+	}
+	
+	function memberList() {
+		if(ajax.readyState ==4) {
+			if(ajax.status ==200) {
+				console.log(ajax.responseText);
+				list.innerHTML = ajax.responseText;
+			} else {
+				alert("서버오류 : "+ ajax.status);
+			}
+		}
+	}
+</script>
+</head>
+<body>
+
+<form name="f">
+	회원이름 : <input type="text" name="name">
+			<input type="button" value="검색" onclick="loadName(this.form)">
+</form>
+<br>
+<div id="list">
+	<!-- 내용 -->
+</div>
+
+</body>
+</html>

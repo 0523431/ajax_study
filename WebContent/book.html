@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>책정보 보기</title>
+
+<script type="text/javascript" src="ajax.js">
+</script>
+<script type="text/javascript">
+	// 
+	function bookXml() {
+		sendRequest("book.xml", null, parseXML, "GET");
+	}
+	
+	function parseXML() {
+		if(ajax.readyState ==4) {
+			if(ajax.status ==200) {
+				console.log(ajax.responseXML);
+				listBookInfo();
+			} else {
+				alert("서버오류 : " + ajax.status);
+			}
+		}
+	}
+	
+	function listBookInfo() {
+		// 서버를 통해 받은 결과를 responseXML형태로 저장
+		var xmlDoc = ajax.responseXML;
+		var bookinfo = xmlDoc.getElementsByTagName("book");
+		
+		var sumPrice =0;
+		var output = "<table border='1' style='border-collapse: collapse;'>"
+					 +"<tr><th>제목</th><th>저자</th><th>가격</th><tr>";
+		
+		for(var i=0; i<bookinfo.length; i++) {
+			
+			var title = bookinfo[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
+			var author = bookinfo[i].getElementsByTagName("author")[0].childNodes[0].nodeValue;
+			var price = bookinfo[i].getElementsByTagName("price")[0].childNodes[0].nodeValue;
+			sumPrice += parseInt(price);
+			
+			output += "<tr><td>"+title+"</td><td>"+author+"</td><td>"+price+"</td></tr>";
+		}
+		
+		output += "<tr><td colspan='3'> 책 권수 : "+bookinfo.length
+				  +",  총 가격 : "+sumPrice+"</td></tr></table>";
+				  
+		result.innerHTML = "<h3>책 정보 보기</h3>";
+		result.innerHTML += output;
+	}
+</script>
+
+</head>
+<body>
+
+<input type="button" value="xml분석하기" onclick="bookXml()">
+
+<div id="result">
+	loading ...
+	<!-- 내용 -->
+</div>
+
+</body>
+</html>

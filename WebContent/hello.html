@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+
+<script type="text/javascript" src="ajax.js">
+</script>
+<script type="text/javascript">
+	// 버튼을 눌러서 호출된 함수
+	function helloToServer() {
+		// sendRequest(url, params, callback, method)
+		sendRequest("hello.jsp","name="+document.f.name.value, helloFromServer, "POST");
+	}
+	
+	// 콜백 함수? ajax 객체의 상태가 변경될 때 자동 호출되는 함수
+	/*
+		ajax.readyState
+		- 0 : ajax 객체 생성 : ajax = getAjaxObject();
+		- 1 : ajax 객체 준비 상태, open 함수 실행 상태 : ajax.open(httpMethod, httpUrl, true);
+		- 2 : ajax 객체 전송 상태, send 함수 실행 상태, 서버로부터 응답이 오기 전
+		- 3 : 서버로부터 응답 중인 상태(응답이 시작됐으나 끝나지 않음)
+		- 4 : 서버에서 응답 완료 상태(응답 끝)
+		
+		ajax.status
+		- 응답이 전송되어 온 응답 상태
+		- 200 : 정상처리
+		- 404 : 해당 페이지 없음
+		- 500 : 서버 페이지는 있지만 오류가 발생함
+	*/
+	function helloFromServer() {
+		if(ajax.readyState ==4) {
+			if(ajax.status ==200) {
+				
+				// ajax.responseText : 서버에서 전송한 응답 내용을 저장
+				// hello라는 id속성값의 innerHTML에 저장
+				hello.innerHTML = ajax.responseText;
+			}
+		}
+	}
+</script>
+</head>
+<body>
+
+<form name="f">
+	<input type="text" name="name">
+	<input type="button" value="인사하기" onclick="helloToServer()">
+</form>
+
+<div id="hello">
+	<!-- 
+		이 사이로 hello.jsp의 내용이 ajax을 통해서 들어오게 됨
+	-->
+</div>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+
+<books>
+	<book>
+		<title>홍길동전</title>
+		<author>허균</author>
+		<price>10000</price>
+	</book>
+	<book>
+		<title>자바의정석</title>
+		<author>남궁성</author>
+		<price>28000</price>
+	</book>
+	<book>
+		<title>웹표준</title>
+		<author>댄 씨더홈</author>
+		<price>35000</price>
+	</book>
+	<book>
+		<title>춘향전</title>
+		<author>무명씨</author>
+		<price>15000</price>
+	</book>
+	<book>
+		<title>JSP</title>
+		<author>최범균</author>
+	<price>30000</price>
+	</book>
+</books>

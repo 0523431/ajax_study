@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>서울 구</title>
+
+<script type="text/javascript" src="ajax.js">
+</script>
+<script type="text/javascript">
+	function loadxml(rtype, tag) {
+		// 전역변수 (var이 붙으면 이 함수에서만 사용가능한 변수가 됨)
+		requestType =rtype;
+		requestTag =tag;
+		// function sendRequest(url, params, callback, method)
+		sendRequest("address.xml", null, parseXML, "GET");
+	}
+	
+	function parseXML() {
+		if(ajax.readyState ==4) {
+			if(ajax.status ==200) {
+				if(requestType == 'all') {
+					listAllStates();
+				} else {
+					listPartStates();
+				}
+			} else {
+				alert("서버오류 : " + ajax.status);
+			}
+		}
+	}
+	
+	/*
+		서버에서 결과를 수신받을 수 있음 (다음의 형태로 저장할 수 있음)
+			responseText : 문자열 형태로 수신
+			responseXML  : xml문서를 파싱하여 문서 노드 객체 저장
+	*/
+	// 전체 구 정보 출력
+	function listAllStates() {
+		// console.log(ajax.responseText);
+		// responseXML : DOM트리의 문서노드를 리턴(최상단 루트노드를 뜻함)
+		var xmlDoc = ajax.responseXML;
+		// allStates : state 태그 전부를 저장하게 됨
+		var allStates = xmlDoc.getElementsByTagName("state"); // 태그 이름 : state
+		var divTag = document.getElementById("result");
+		divTag.innerHTML = "서울 전체 구";
+		
+		for(var i=0; i<allStates.length; i++) {
+			divTag.innerHTML += "<br>-" + allStates[i].childNodes[0].nodeValue;
+		}
+	}
+	
+	
+	function listPartStates() {
+		// 문서의 최상단을 가져오고
+		var xmlDoc = ajax.responseXML;
+		// node : east, west, north, south 태그 중 한 개
+		var node = xmlDoc.getElementsByTagName(requestTag)[0]; // east, west, north, south
+		var states = node.getElementsByTagName("state"); // 지정한 state만 node에서 가져와?
+		var divTag = document.getElementById("result");
+		divTag.innerHTML = "서울"+ requestType +"쪽 구";
+		
+		for(var i=0; i<states.length; i++) {
+			divTag.innerHTML += "<br>-" + states[i].childNodes[0].nodeValue;
+		}
+	}
+</script>
+</head>
+<body>
+
+<h1>서울의 구 정보</h1>
+
+<input type="button" value="서울 전체 구" onclick="loadxml('all', 'all')">
+<input type="button" value="서울 동쪽 구" onclick="loadxml('동', 'east')">
+<input type="button" value="서울 서쪽 구" onclick="loadxml('서', 'west')">
+<input type="button" value="서울 남쪽 구" onclick="loadxml('남', 'south')">
+<input type="button" value="서울 북쪽 구" onclick="loadxml('북', 'north')">
+
+<div id="result">
+	<!-- 내용 -->
+</div>
+</body>
+</html>
