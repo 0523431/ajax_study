@@ -16,4 +16,9 @@
 		<price>30000</price>
 		<comment>교통좋고, 공기 좋음</comment>
 	</property>
+	<property>
+		<address>인천시 남동구 구월동 100번지</address>
+		<price>50000</price>
+		<comment>교통좋고, 놀거리가 많음</comment>
+	</property>
 </properties>

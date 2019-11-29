@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>xml, json 예제</title>
+
+<script type="text/javascript" src="ajax2.js"></script>
+<script type="text/javascript">
+	function doJson() {
+		// 객첵 send로 전송됨
+		new ajax.xhr.Request("house.jsp", null, jsonresult, "GET");
+	}
+	
+	function doXml() {
+		new ajax.xhr.Request("house.xml", null, xmlresult, "GET");
+	}
+	
+	// json콜백함수
+	// xhr : ajax객체 (내가 정할 수 있음)
+	function jsonresult(xhr) {
+		if(xhr.readyState ==4) {
+			if(xhr.status ==200) {
+				console.log(xhr); // console이 보이게 도와줌
+				jsonControl(xhr);
+			} else {
+				alert("서버오류 : " + xhr.status);
+			}
+		}
+	}
+	
+	// xml콜백함수
+	// x : ajax객체 (내가 정할 수 있음)
+	function xmlresult(x) {
+		if(x.readyState ==4) {
+			if(x.status ==200) {
+				xmlControl(x);
+			} else {
+				alert("서버오류 : " + x.status);
+			}
+		}
+	}
+	
+	function jsonControl(xhr) {
+		var htmldata = "<table border='1'><tr><th>주소</th><th>가격</th><th>특징</th></tr>";
+		
+		//var allInfo = eval("("+xhr.responseText+")"); // json객체 생성
+		var allInfo = JSON.parse(xhr.responseText);
+		for(var i=0; i<allInfo.properties.length; i++) {
+			var address = allInfo.properties[i].address;
+			var price = allInfo.properties[i].price;
+			var comment = allInfo.properties[i].comment;
+			
+			htmldata += "<tr><td>"+address+"</td>"
+						+"<td>"+price+"원</td><td>"+comment+"</td></tr>";
+		}
+		htmldata += "<tr><td colspan='3' align='center'>총 매물 건수 : "
+					+allInfo.properties.length+"</td></tr></table>";
+		
+		result.innerHTML = "<h3>JSON 주택 정보</h3>";
+		result.innerHTML += htmldata;
+	}
+	
+/* xml : extensible markup language : 사용자가 태그를 설정(지정)할 수 있는 마크업 언어 
+ * 		  파싱을 통해 태그안에 있는 내용을 사용자가 원하는데로 뽑아올 수 있음
+ *	    <xml 파싱방법>
+ *     - DOMParser : DOM 트리구조로 파싱한 결과를 리턴 (그러니까 문자열x.responseXML을 DOM트리 구조로 재해석해서 xmlDoc에 저장)
+ *     				  객체를 메모리에 저장해야하기때문에, 메모리 사용이 많음 (대용량데이터를 파싱할 경우 에러발생률이 높아짐)
+ *     - SAXParser : 이벤트 방식으로 파싱함
+ *					  메모리 사용이 적음 
+ *					  
+ *
+ */
+ 
+	function xmlControl(x) {
+		var htmldata = "<table border='1'><tr><th>주소</th><th>가격</th><th>특징</th></tr>";
+		
+//		var xmlDoc = x.responseXML; // 문자열 x.responseXML
+		var xmlDoc = new DOMParser().parseFromString(x.responseText, "text/xml"); // 자바스크립트에서 파싱할 수 있는 방법
+		var allInfo = xmlDoc.getElementsByTagName("property");
+		for(var i=0; i<allInfo.length; i++) {
+			var address = allInfo[i].getElementsByTagName("address")[0].childNodes[0].nodeValue;
+			var price = allInfo[i].getElementsByTagName("price")[0].childNodes[0].nodeValue;
+			var comment = allInfo[i].getElementsByTagName("comment")[0].childNodes[0].nodeValue;
+			
+			htmldata += "<tr><td>"+address+"</td>"
+						+"<td>"+price+"</td><td>"+comment+"</td></tr>";
+		}
+		htmldata += "<tr><td colspan='3' align='center'>총 매물 건수 : "
+					+allInfo.length+"</td></tr></table>";
+		
+		result.innerHTML = "<h3>XML 주택 정보</h3>";
+		result.innerHTML += htmldata;
+	}
+	
+</script>
+
+</head>
+<body>
+
+<input type="button" value="json 검색" onclick="doJson()">
+<input type="button" value="xml 검색" onclick="doXml()">
+<div id="result">
+	<!-- 내용 -->
+</div>
+</body>
+</html>

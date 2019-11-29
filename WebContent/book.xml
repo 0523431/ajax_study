@@ -26,4 +26,9 @@
 		<author>최범균</author>
 	<price>30000</price>
 	</book>
+	<book>
+		<title>새로운 책 추가</title>
+		<author>김추가</author>
+		<price>20000</price>
+	</book>
 </books>

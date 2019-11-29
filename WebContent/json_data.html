@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>JSON 데이터 연습</title>
+
+<script type="text/javascript" src="ajax.js">
+</script>
+<script type="text/javascript">
+	// 등록된 콜백함수
+	function resultView() {
+		if(ajax.readyState ==4) {
+			if(ajax.status ==200) {
+				jsonView(ajax.responseText);
+			} else {
+				alert("서버오류" + ajax.status);
+			}
+		}
+	}
+	
+	/*
+		jsonView(ajax.responseText)
+		
+		jsonView(jsondata)
+		
+		jsondata => json형태의 문자열
+		
+		파싱 두가지 방법
+			- eval : json 파싱해주는 함수
+			- JSON.parse(jsondata) : key값들을 다 "" 문자열화 해줘야함
+	*/
+	function jsonView(jsondata) {
+		editdata = "<br><table border='1'>"
+					+ "<tr><th>우편번호</th><th>읍면동</th><th>주소</th></tr>";
+					
+		//var data = eval("("+jsondata+")"); // json 객체 생성
+		var data = JSON.parse(jsondata);
+		for(var i=0; i<data.ZIP.length; i++) {
+			var code = data.ZIP[i].zipcode;
+			var dong = data.ZIP[i].dong;
+			var addr = data.ZIP[i].addr;
+			
+			editdata += "<tr><td>"+code+"</td><td>"+dong+"</td><td>"+addr+"</td></tr>";
+		}
+		
+		editdata += "</table>";
+		
+		result.innerHTML = editdata;
+	}
+</script>
+</head>
+<body>
+
+<input type="button" value="우편번호 조회" onclick="sendRequest('json_data.jsp', null, resultView, 'GET')">
+<br>
+<div id="result">
+	loading...
+	<!-- 내용 -->
+</div>
+
+</body>
+</html>

@@ -41,7 +41,13 @@
 	<tr><th>아이디</th> <th>이름</th> <th>전화</th>
 		<th>이메일</th> <th>성별</th>
 	</tr>
-	<c:forEach var="data" items="${rs.rows}"> <%--rs에 있는 객체를 하나씩 꺼냄 --%>
+	<c:forEach var="data" items="${rs.rows}">
+	<%--
+		rs는 sql의 결과 그리고 rows는 그 결과를 한줄한줄 배열로 저장한 아이
+		그리고 그 한줄 한줄을 data라는 변수명으로 치환
+		그래서 rs에 있는 객체를 하나씩 꺼낼 수 있게 되고
+		표현식이 data.name ===> rs.rows[index].name이 됨
+	--%>
 	<tr><td>${data.id}</td> <td>${data.name}</td> <td>${data.tel}</td>
 		<td>${data.email}</td> <td>${data.gender==1? '남자':'여자'}</td>
 	</tr>
